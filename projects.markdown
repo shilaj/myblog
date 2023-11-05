@@ -4,7 +4,7 @@ title: Projects
 permalink: /projects/
 ---
 
-<a href="/colorTap/index.html">
+<a href="/projects/colortap/index.html">
     <img 
         src="/colortap.png" 
         alt="Color Tap"
