@@ -1,9 +1,0 @@
-main: 
-  - title: "About"
-    url: /about/
-  - title: "Contact"
-    url: /contact/
-  - title: "Poems"
-    url: /poems/
-  - title: "Projects"
-    url: /projects/
