@@ -20,7 +20,7 @@
 
 #Name of website
 title: Shilaj Baral
-
+title-img: "/assets/img/writing.png"
 #Your name to show in the footer
 author: Shilaj
 
@@ -31,7 +31,6 @@ author: Shilaj
 navbar-links:
   About Me: "about"
   Projects: "projects"
-  Poems: "poems"
 
 ################
 # --- Logo --- #
