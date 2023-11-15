@@ -30,3 +30,6 @@ permalink: /projects/
         </a>
     </div>
 </div>
+
+
+<!-- Added ads.txt file. CHECK! CHECK! -->
