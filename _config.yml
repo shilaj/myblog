@@ -29,7 +29,7 @@ author: Shilaj
 ##############################################
 
 navbar-links:
-  About Me: "about"
+  Blogs: "blogs/index"
   Projects: "projects"
 
 ################
@@ -126,7 +126,7 @@ footer-hover-col: "#0085A1"
 #################################
 
 # Fill in your Google Analytics tag ID (or "Measurement ID") to track your website usage
-#gtag: "G-XXXXXXXXXX"
+gtag: "G-GB1MN7ERM7"
 
 
 ####################
@@ -140,7 +140,7 @@ footer-hover-col: "#0085A1"
 #fb_comment_id: ""
 
 # To use CommentBox, sign up for a Project ID on https://commentbox.io
-#commentbox: "" # Project ID, e.g. "5694267682979840-proj"
+commentbox: "5762914531147776-proj" # Project ID, e.g. "5694267682979840-proj"
 
 # To use Utterances comments: (0) uncomment the following section, (1) fill in
 # "repository" (make sure the repository is public), (2) Enable Issues in your repository,
@@ -202,6 +202,7 @@ markdown: kramdown
 highlighter: rouge
 permalink: /:year-:month-:day-:title/
 paginate: 5
+paginate_path: "/blogs/page:num/"
 
 kramdown:
   input: GFM
@@ -236,6 +237,7 @@ exclude:
 plugins:
   - jekyll-paginate
   - jekyll-sitemap
+  - jekyll-redirect-from
 
 # Beautiful Jekyll / Dean Attali
 # 2fc73a3a967e97599c9763d05e564189

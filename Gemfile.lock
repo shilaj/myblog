@@ -274,6 +274,7 @@ DEPENDENCIES
   jekyll
   jekyll-feed
   jekyll-paginate
+  jekyll-redirect-from
   tzinfo-data
   wdm (~> 0.1.1)
   webrick (~> 1.8)
