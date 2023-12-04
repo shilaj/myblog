@@ -20,7 +20,7 @@
 
 #Name of website
 title: Shilaj Baral
-title-img: "/assets/img/writing.png"
+title-img: "/assets/img/avatar.jpg"
 #Your name to show in the footer
 author: Shilaj
 
@@ -30,6 +30,7 @@ author: Shilaj
 
 navbar-links:
   Blogs: "blogs/index"
+  Poems: "literature/index"
   Projects: "projects"
 
 ################
@@ -202,7 +203,7 @@ markdown: kramdown
 highlighter: rouge
 permalink: /:year-:month-:day-:title/
 paginate: 5
-paginate_path: "/blogs/page:num/"
+paginate_path: "/literature/page:num"
 
 kramdown:
   input: GFM
@@ -238,6 +239,7 @@ plugins:
   - jekyll-paginate
   - jekyll-sitemap
   - jekyll-redirect-from
+  - jekyll-paginate-v2
 
 # Beautiful Jekyll / Dean Attali
 # 2fc73a3a967e97599c9763d05e564189
@@ -275,3 +277,9 @@ plugins:
 #   - vendor/cache/
 #   - vendor/gems/
 #   - vendor/ruby/
+
+collections: 
+  posts:
+    output: true
+  blogs:
+    output: true
