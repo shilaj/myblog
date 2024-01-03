@@ -33,3 +33,4 @@ gem "webrick", "~> 1.8"
 gem "jekyll-redirect-from"
 gem "jekyll-paginate-v2"
 
+# To change the date format, check out the footer.html file
