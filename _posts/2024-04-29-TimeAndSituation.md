@@ -2,7 +2,7 @@
 layout: post
 title: परिवेश-समय 
 subtitle: Oblivion.
-date: 2024-04-30
+date: 2024-04-29
 ---
 
 आखिर बद्लियो कुन र दोष पायो कसले? <br>
