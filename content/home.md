@@ -1,8 +1,11 @@
 ---
 name: "Dr. Aria Chen"
 role: "Graduate Researcher — AI & Computational Fluid Dynamics"
-title: "Modeling the Invisible"
-subtitle: "Building data-driven simulations for safer, cleaner nuclear energy."
+title: "Flow-Aware Intelligence"
+subtitle: "Modeling turbulent nuclear systems with machine learning and high-fidelity simulation."
+tagline: "AI + Computational Fluid Dynamics"
+collaborators_label: "Collaborators"
+collaborators_heading: "Trusted partners in research"
 profile_image_path: "/profile.jpg"
 social_links:
   github: "https://github.com/ariachen"
@@ -21,6 +24,11 @@ collaborators:
     affiliation: "University of Cambridge"
     url: "https://www.cam.ac.uk"
     avatar: "/collaborators/ethan.jpg"
+highlights:
+  - title: "Differentiable solvers"
+    description: "Fusing physics priors with machine learning for reactor-scale flows."
+  - title: "Realtime insight"
+    description: "Rapid validation loops for experiments and simulations."
 ---
 
 I build computational tools that merge **machine learning** with high-fidelity **computational fluid dynamics** to advance nuclear safety and reactor design. My work explores surrogate modeling for turbulence, differentiable solvers, and autonomous validation pipelines.
@@ -31,4 +39,4 @@ Current focus areas include:
 - Real-time uncertainty quantification for sensor fusion.
 - Human-in-the-loop visualization for explainable CFD.
 
-Outside the lab, I mentor students, co-organize the _AI for Nuclear_ seminar series, and contribute to open-source tooling for scientific reproducibility.
+Outside the lab, I mentor students, co-organize the _AI for Nuclear_ seminar series, and contribute to open-source tooling for scientific reproducibility. Recent collaborations span plasma-facing materials, boiling crisis prediction, and hybrid RANS-LES edge cases.

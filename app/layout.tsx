@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
+import { LayoutShell } from '@/components/layout-shell';
 
 const inter = Inter({ subsets: ['latin'], display: 'swap' });
 
@@ -16,8 +17,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={inter.className}>
-      <body className="bg-slate-950 text-slate-100 antialiased">
-        {children}
+      <body>
+        <LayoutShell>{children}</LayoutShell>
       </body>
     </html>
   );

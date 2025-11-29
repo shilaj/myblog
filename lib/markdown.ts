@@ -1,67 +1,63 @@
 import fs from 'fs';
-import matter from 'gray-matter';
 import path from 'path';
+import matter from 'gray-matter';
 
-type Frontmatter = Record<string, unknown>;
+const contentDirectory = path.join(process.cwd(), 'content');
+const blogDirectory = path.join(contentDirectory, 'blogs');
 
-export type MarkdownDocument<T extends Frontmatter = Frontmatter> = {
-  frontmatter: T;
-  content: string;
-};
-
-export type BlogFrontmatter = {
-  title: string;
-  date: string;
+export type Frontmatter = Record<string, any> & {
+  title?: string;
+  date?: string;
   excerpt?: string;
   tags?: string[];
   coverImage?: string;
 };
 
-const CONTENT_DIR = path.join(process.cwd(), 'content');
-const BLOG_DIR = path.join(CONTENT_DIR, 'blogs');
+export type MarkdownContent = {
+  frontmatter: Frontmatter;
+  content: string;
+};
 
-export function getMarkdownContent<T extends Frontmatter = Frontmatter>(filename: string): MarkdownDocument<T> {
-  const targetPath = path.join(CONTENT_DIR, filename);
-  const fileContents = fs.readFileSync(targetPath, 'utf8');
+export function getMarkdownContent(filename: string): MarkdownContent {
+  const fullPath = path.join(contentDirectory, filename);
+  const fileContents = fs.readFileSync(fullPath, 'utf8');
   const { data, content } = matter(fileContents);
 
   return {
-    frontmatter: data as T,
+    frontmatter: data as Frontmatter,
     content,
   };
 }
 
 export function getPostSlugs(): string[] {
-  if (!fs.existsSync(BLOG_DIR)) {
-    return [];
-  }
-
   return fs
-    .readdirSync(BLOG_DIR)
+    .readdirSync(blogDirectory)
     .filter((file) => file.endsWith('.md'))
     .map((file) => file.replace(/\.md$/, ''));
 }
 
-export function getPostBySlug(slug: string): MarkdownDocument<BlogFrontmatter> & { slug: string } {
-  const realSlug = slug.replace(/\.md$/, '');
-  const fullPath = path.join(BLOG_DIR, `${realSlug}.md`);
+export type BlogPost = MarkdownContent & { slug: string };
+
+export function getPostBySlug(slug: string): BlogPost {
+  const fullPath = path.join(blogDirectory, `${slug}.md`);
   const fileContents = fs.readFileSync(fullPath, 'utf8');
   const { data, content } = matter(fileContents);
 
   return {
-    slug: realSlug,
-    frontmatter: data as BlogFrontmatter,
+    slug,
+    frontmatter: data as Frontmatter,
     content,
   };
 }
 
-export function getAllPosts(): Array<MarkdownDocument<BlogFrontmatter> & { slug: string }> {
-  return getPostSlugs()
-    .map((slug) => getPostBySlug(slug))
-    .sort((postA, postB) => {
-      const dateA = new Date(postA.frontmatter.date || '').getTime();
-      const dateB = new Date(postB.frontmatter.date || '').getTime();
+export function getAllPosts(): BlogPost[] {
+  const slugs = getPostSlugs();
 
-      return dateB - dateA;
-    });
+  const posts = slugs.map((slug) => getPostBySlug(slug));
+
+  return posts.sort((a, b) => {
+    const dateA = a.frontmatter.date ? new Date(a.frontmatter.date).getTime() : 0;
+    const dateB = b.frontmatter.date ? new Date(b.frontmatter.date).getTime() : 0;
+    return dateB - dateA;
+  });
 }
