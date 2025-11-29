@@ -40,7 +40,7 @@ export default function HomePage() {
     : publicationsDoc.content;
 
   return (
-    <div className="space-y-16">
+    <div className="space-y-12 md:space-y-16">
       <section className="grid gap-8 rounded-3xl border border-white/10 bg-white/5 p-8 lg:grid-cols-2">
         <div>
           <p className="text-sm uppercase tracking-widest text-slate-300">{homeDoc.frontmatter.role}</p>
@@ -76,7 +76,7 @@ export default function HomePage() {
           </p>
           <video
             src="/assets/img/natural_circulation.mp4"
-            className="mt-4 w-full rounded-2xl border border-white/10"
+            className="mt-4 aspect-video w-full rounded-2xl border border-white/10"
             autoPlay
             loop
             muted

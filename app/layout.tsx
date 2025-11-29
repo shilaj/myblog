@@ -7,8 +7,8 @@ import './globals.css';
 const inter = Inter({ subsets: ['latin'], display: 'swap' });
 
 export const metadata: Metadata = {
-  title: 'AI & CFD Research Portfolio',
-  description: 'Data-driven academic portfolio built with Next.js and Markdown content.',
+  title: 'Shilaj Baral',
+  description: 'An academic portfolio.',
 };
 
 export default function RootLayout({

@@ -73,11 +73,18 @@ export default function Comments({ threadId, title = 'Comments' }: CommentsProps
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isRedirecting, setIsRedirecting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [currentDomain, setCurrentDomain] = useState('this domain');
 
   useEffect(() => {
     if (!auth) return undefined;
     return onAuthStateChanged(auth, (current: User | null) => setUser(current));
   }, [auth]);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setCurrentDomain(window.location.hostname);
+    }
+  }, []);
 
   useEffect(() => {
     if (!auth) return undefined;
@@ -169,7 +176,7 @@ export default function Comments({ threadId, title = 'Comments' }: CommentsProps
   function resolveAuthError(firebaseError: FirebaseError): string {
     switch (firebaseError.code) {
       case 'auth/unauthorized-domain':
-        return 'Add this domain to Firebase Authentication → Settings → Authorized domains.';
+        return `Add ${currentDomain} to Firebase Authentication → Settings → Authorized domains.`;
       case 'auth/account-exists-with-different-credential':
         return 'You already used a different provider for this email. Sign in with that provider first.';
       case 'auth/network-request-failed':
@@ -193,7 +200,7 @@ export default function Comments({ threadId, title = 'Comments' }: CommentsProps
 
   return (
     <section className="mt-12 rounded-2xl border border-white/10 bg-white/5 p-6">
-      <div className="flex items-center justify-between gap-4">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h2 className="text-lg font-semibold text-white">{title}</h2>
           <p className="text-sm text-slate-400">Google sign-in required to participate.</p>

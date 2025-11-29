@@ -94,7 +94,7 @@ export default function ProjectPage({ params }: ProjectPageProps) {
             <iframe
               src={project.frontmatter.embedPath}
               title={`${project.frontmatter.title} playable demo`}
-              className="h-[640px] w-full"
+              className="h-[min(70vh,640px)] w-full min-h-[300px]"
               loading="lazy"
             />
           </div>
