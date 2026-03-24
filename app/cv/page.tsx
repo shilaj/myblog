@@ -3,8 +3,8 @@ import Markdown from '@/components/Markdown';
 import { getMarkdownContent } from '@/lib/markdown';
 
 export const metadata = {
-  title: 'CV | AI × CFD',
-  description: 'Downloadable résumé powered by Markdown.'
+  title: 'CV | Shilaj Baral',
+  description: 'Curriculum vitae.',
 };
 
 export default function CvPage() {
@@ -12,16 +12,18 @@ export default function CvPage() {
 
   return (
     <div className="space-y-6">
-      <article className="prose prose-invert max-w-none">
-        <p className="text-sm uppercase tracking-widest text-slate-400">Curriculum Vitae</p>
-        <h1>{doc.frontmatter.title}</h1>
-        <Markdown content={doc.content} />
+      <article>
+        <p className="text-xs font-medium uppercase tracking-widest text-sky-600 dark:text-cyan-300">Curriculum Vitae</p>
+        <h1 className="mt-2 text-3xl font-bold text-slate-900 dark:text-white">{doc.frontmatter.title}</h1>
+        <div className="mt-6 prose prose-slate max-w-none dark:prose-invert">
+          <Markdown content={doc.content} />
+        </div>
       </article>
       <Link
         href="/resume/Shilaj_Baral_Resume.pdf"
-        className="inline-flex rounded-full border border-white/20 px-5 py-2 text-sm text-cyan-300 hover:bg-white hover:text-slate-900"
+        className="inline-flex items-center gap-2 rounded-full border border-slate-300 px-5 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-900 hover:bg-slate-900 hover:text-white dark:border-white/20 dark:text-cyan-300 dark:hover:bg-white dark:hover:text-slate-900"
       >
-        Download PDF
+        Download PDF ↓
       </Link>
     </div>
   );

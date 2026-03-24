@@ -2,18 +2,20 @@ import Markdown from '@/components/Markdown';
 import { getMarkdownContent } from '@/lib/markdown';
 
 export const metadata = {
-  title: 'Publications',
-  description: 'Selected publications updated via Markdown.'
+  title: 'Publications | Shilaj Baral',
+  description: 'Selected publications in AI-assisted CFD for nuclear systems.',
 };
 
 export default function PublicationsPage() {
   const doc = getMarkdownContent<{ title: string }>('publications.md');
 
   return (
-    <article className="prose prose-invert max-w-none">
-      <p className="text-sm uppercase tracking-widest text-slate-400">Publications</p>
-      <h1>{doc.frontmatter.title}</h1>
-      <Markdown content={doc.content} />
+    <article>
+      <p className="text-xs font-medium uppercase tracking-widest text-sky-600 dark:text-cyan-300">Publications</p>
+      <h1 className="mt-2 text-3xl font-bold text-slate-900 dark:text-white">{doc.frontmatter.title}</h1>
+      <div className="mt-6 prose prose-slate max-w-none dark:prose-invert">
+        <Markdown content={doc.content} />
+      </div>
     </article>
   );
 }

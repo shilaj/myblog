@@ -52,6 +52,14 @@ export function getMarkdownContent<T extends Frontmatter = Frontmatter>(filename
   };
 }
 
+export function tryGetMarkdownContent<T extends Frontmatter = Frontmatter>(filename: string): MarkdownDocument<T> | null {
+  const targetPath = path.join(CONTENT_DIR, filename);
+  if (!fs.existsSync(targetPath)) return null;
+  const fileContents = fs.readFileSync(targetPath, 'utf8');
+  const { data, content } = matter(fileContents);
+  return { frontmatter: data as T, content };
+}
+
 export function getPostSlugs(): string[] {
   if (!fs.existsSync(BLOG_DIR)) {
     return [];

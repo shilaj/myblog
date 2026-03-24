@@ -25,8 +25,8 @@ social_links:
 
 I’m a student researcher working at the intersection of CFD, physics, and machine learning, building hybrid models that can predict full flow fields while staying faithful to the underlying PDEs and numerical methods.
 
-- **Affiliation:** Jeonbuk National University
-- **Course:** Master's student
+- **Affiliation:** POSTECH
+- **Course:** Ph.D. student
 - **Supervisor:** Prof. Joongoo Jeon
 - **Laboratory:** [NINE](https://ninelab.postech.ac.kr/) Lab
 

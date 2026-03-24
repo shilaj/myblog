@@ -13,4 +13,5 @@ title: "Conferences & Talks"
 - **Shilaj Baral**, Youngkyu Lee, Sangam Khanal, and Joongoo Jeon. "RePIT-v1.0: A software for hybrid ML-CFD computation", ***Transactions of the Korean Nuclear Society Spring Meeting***, Jeju, Korea, May 22-23, 2025. ***(Oral)***
 
 
-<!-- # Talks -->
+# Talks
+- Presented on [JK-FLOW](https://sites.google.com/view/kai-fukami/jk-flow?authuser=0). **Title:** Scalability and generalization of residual-guided ML-CFD hybrid simulation: From 2D benchmarks to 3D application
