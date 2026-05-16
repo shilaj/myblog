@@ -21,12 +21,12 @@ export default function LangBio({ translations, role }: Props) {
 
   return (
     <>
-      <p className="text-xs font-medium uppercase tracking-widest text-sky-600 dark:text-cyan-300">{role}</p>
-      <h1 className="mt-3 text-3xl font-bold tracking-tight text-slate-900 dark:text-white lg:text-4xl">
+      <p className="eyebrow">{role}</p>
+      <h1 className="mt-4 text-3xl font-bold leading-tight tracking-tight text-slate-900 dark:text-white lg:text-[2.5rem]">
         <TypewriterText key={lang} text={t.title} />
       </h1>
-      <p className="mt-3 text-slate-600 dark:text-slate-300">{t.subtitle}</p>
-      <div className="mt-4 prose prose-sm prose-slate dark:prose-invert max-w-none">
+      <p className="mt-4 text-base text-slate-600 dark:text-slate-300 lg:text-lg">{t.subtitle}</p>
+      <div className="mt-5 prose prose-slate dark:prose-invert max-w-none prose-a:text-sky-600 dark:prose-a:text-cyan-300 prose-a:no-underline hover:prose-a:underline">
         <Markdown content={t.content} />
       </div>
     </>

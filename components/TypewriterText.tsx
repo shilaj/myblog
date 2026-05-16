@@ -26,12 +26,17 @@ export default function TypewriterText({ text, speed = 40, className }: Typewrit
     return () => window.clearInterval(interval);
   }, [text, speed]);
 
-  const cursorVisible = displayed.length === text.length ? 'opacity-0' : 'opacity-100';
+  const finished = displayed.length === text.length;
 
   return (
-    <span className={`inline-flex items-baseline gap-1 ${className ?? ''}`}>
+    <span className={`inline-flex items-baseline gap-1.5 ${className ?? ''}`}>
       <span>{displayed || text}</span>
-      <span className={`h-6 w-px bg-white ${cursorVisible} animate-pulse`} aria-hidden="true" />
+      <span
+        className={`inline-block h-[0.9em] w-[2px] translate-y-[2px] rounded-sm bg-gradient-to-b from-sky-400 to-indigo-500 ${
+          finished ? 'animate-pulse opacity-70' : 'opacity-100'
+        }`}
+        aria-hidden="true"
+      />
     </span>
   );
 }

@@ -4,14 +4,15 @@ import Comments from '@/components/Comments';
 import Markdown from '@/components/Markdown';
 import { getPoemBySlug, getPoemSlugs, getAllPoems } from '@/lib/markdown';
 
-type Props = { params: { slug: string } };
+type Props = { params: Promise<{ slug: string }> };
 
 export function generateStaticParams() {
   return getPoemSlugs().map((slug) => ({ slug }));
 }
 
-export function generateMetadata({ params }: Props) {
-  const poem = getPoemBySlug(params.slug);
+export async function generateMetadata({ params }: Props) {
+  const { slug } = await params;
+  const poem = getPoemBySlug(slug);
   if (!poem) return { title: 'Poem not found' };
   return {
     title: `${poem.frontmatter.title} | Poetry`,
@@ -19,8 +20,9 @@ export function generateMetadata({ params }: Props) {
   };
 }
 
-export default function PoemPage({ params }: Props) {
-  const poem = getPoemBySlug(params.slug);
+export default async function PoemPage({ params }: Props) {
+  const { slug } = await params;
+  const poem = getPoemBySlug(slug);
   if (!poem) notFound();
 
   const poems = getAllPoems();
@@ -31,12 +33,12 @@ export default function PoemPage({ params }: Props) {
   const next = poems.length > 1 ? poems[(index - 1 + poems.length) % poems.length] : null;
 
   return (
-    <article className="prose prose-slate max-w-none dark:prose-invert">
-      <Link href="/hobbies#poetry" className="not-prose text-sm text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white">
-        ← Back to poetry
+    <article className="fade-up prose prose-slate max-w-none dark:prose-invert prose-a:text-sky-600 dark:prose-a:text-cyan-300 prose-a:no-underline hover:prose-a:underline">
+      <Link href="/hobbies#poetry" className="not-prose inline-flex items-center gap-1 text-sm text-slate-500 transition hover:text-slate-900 dark:text-slate-400 dark:hover:text-white">
+        <span className="transition group-hover:-translate-x-1">←</span> Back to poetry
       </Link>
-      <p className="mt-6 text-xs font-medium uppercase tracking-[0.3em] text-pink-600 dark:text-pink-200">Poetry</p>
-      <h1>{poem.frontmatter.title}</h1>
+      <p className="not-prose mt-6 eyebrow !text-pink-600 dark:!text-pink-300">Poetry</p>
+      <h1 className="mt-2">{poem.frontmatter.title}</h1>
       <p className="text-sm text-slate-500 dark:text-slate-400">
         {poem.frontmatter.subtitle}
         {poem.frontmatter.date && (
@@ -61,7 +63,7 @@ export default function PoemPage({ params }: Props) {
           </Link>
         ) : <span className="text-slate-400 dark:text-slate-600">Only entry so far</span>}
       </div>
-      <Comments threadId={`poem-${params.slug}`} title="Comments" />
+      <Comments threadId={`poem-${slug}`} title="Comments" />
     </article>
   );
 }

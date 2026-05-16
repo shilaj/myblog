@@ -25,51 +25,80 @@ const langOptions: { code: Lang; label: string }[] = [
 export default function Nav() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const { lang, setLang } = useLang();
 
-  useEffect(() => { setIsOpen(false); }, [pathname]);
+  useEffect(() => {
+    setIsOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  const isActive = (href: string) =>
+    href === '/' ? pathname === '/' : pathname?.startsWith(href);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/80 backdrop-blur dark:border-white/10 dark:bg-slate-950/80">
-      <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-3">
+    <header
+      className={clsx(
+        'sticky top-0 z-50 transition-all duration-300',
+        scrolled
+          ? 'border-b border-slate-200/70 bg-white/70 backdrop-blur-xl dark:border-white/10 dark:bg-slate-950/60'
+          : 'border-b border-transparent bg-transparent'
+      )}
+    >
+      <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-3 md:px-8">
         {/* Logo */}
         <Link
           href="/"
-          className="font-semibold tracking-[0.3em] text-slate-900 dark:text-white"
+          className="group flex items-center gap-2"
           onClick={() => setIsOpen(false)}
         >
-          SB
+          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-sky-500 to-indigo-500 text-sm font-bold tracking-tight text-white shadow-sm transition group-hover:shadow-md group-hover:shadow-sky-500/30">
+            SB
+          </span>
+          <span className="hidden text-sm font-medium tracking-tight text-slate-800 transition group-hover:text-slate-950 dark:text-slate-200 dark:group-hover:text-white sm:inline">
+            Shilaj Baral
+          </span>
         </Link>
 
         {/* Desktop nav */}
-        <nav className="hidden items-center gap-1 text-sm text-slate-600 dark:text-slate-300 md:flex">
+        <nav className="hidden items-center gap-0.5 text-sm text-slate-600 dark:text-slate-300 md:flex">
           {navItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               className={clsx(
-                'rounded-full px-3 py-1.5 transition hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-white/10 dark:hover:text-white',
-                pathname === item.href && 'bg-slate-900 text-white dark:bg-white dark:text-slate-900'
+                'relative rounded-full px-3 py-1.5 transition',
+                isActive(item.href)
+                  ? 'text-slate-900 dark:text-white'
+                  : 'hover:text-slate-900 dark:hover:text-white'
               )}
             >
               {item.label}
+              {isActive(item.href) && (
+                <span className="absolute inset-x-3 -bottom-0.5 h-0.5 rounded-full bg-gradient-to-r from-sky-500 to-indigo-500" />
+              )}
             </Link>
           ))}
         </nav>
 
-        {/* Controls: lang switcher + theme toggle + mobile burger */}
-        <div className="flex items-center gap-1">
-          {/* Language switcher (desktop) */}
-          <div className="hidden items-center rounded-full border border-slate-200 dark:border-white/15 md:flex">
+        {/* Controls */}
+        <div className="flex items-center gap-1.5">
+          <div className="hidden items-center overflow-hidden rounded-full border border-slate-200 text-xs dark:border-white/15 md:flex">
             {langOptions.map(({ code, label }) => (
               <button
                 key={code}
                 onClick={() => setLang(code)}
                 className={clsx(
-                  'px-2.5 py-1 text-xs font-medium transition first:rounded-l-full last:rounded-r-full',
+                  'px-2.5 py-1 font-medium transition',
                   lang === code
                     ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900'
-                    : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white'
+                    : 'text-slate-500 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-white/10 dark:hover:text-white'
                 )}
               >
                 {label}
@@ -79,7 +108,6 @@ export default function Nav() {
 
           <ThemeToggle />
 
-          {/* Mobile burger */}
           <button
             type="button"
             className="rounded-full border border-slate-200 p-1.5 text-slate-600 transition hover:bg-slate-100 dark:border-white/20 dark:text-white dark:hover:bg-white/10 md:hidden"
@@ -98,9 +126,8 @@ export default function Nav() {
         </div>
       </div>
 
-      {/* Mobile menu */}
       {isOpen && (
-        <div className="border-t border-slate-200 px-4 pb-4 pt-2 dark:border-white/10 md:hidden">
+        <div className="border-t border-slate-200 bg-white/95 px-4 pb-4 pt-2 backdrop-blur dark:border-white/10 dark:bg-slate-950/95 md:hidden">
           <nav className="flex flex-col gap-1 text-sm">
             {navItems.map((item) => (
               <Link
@@ -109,7 +136,7 @@ export default function Nav() {
                 onClick={() => setIsOpen(false)}
                 className={clsx(
                   'rounded-xl px-4 py-2 transition hover:bg-slate-100 dark:hover:bg-white/10',
-                  pathname === item.href
+                  isActive(item.href)
                     ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900'
                     : 'text-slate-700 dark:text-slate-300'
                 )}
@@ -118,7 +145,6 @@ export default function Nav() {
               </Link>
             ))}
           </nav>
-          {/* Language switcher (mobile) */}
           <div className="mt-3 flex items-center gap-1">
             <span className="text-xs text-slate-400 dark:text-slate-500">Language:</span>
             {langOptions.map(({ code, label }) => (

@@ -8,14 +8,20 @@ import './globals.css';
 const inter = Inter({ subsets: ['latin', 'latin-ext'], display: 'swap' });
 
 export const metadata: Metadata = {
-  title: 'Shilaj Baral',
-  description: 'Graduate Student Researcher — AI & Computational Fluid Dynamics.',
+  title: 'Shilaj Baral — AI & Computational Fluid Dynamics',
+  description:
+    'Graduate researcher at POSTECH building hybrid CFD + machine learning workflows for advanced nuclear systems.',
+  openGraph: {
+    title: 'Shilaj Baral',
+    description:
+      'AI for fluid dynamics. Hybrid CFD + ML for nuclear systems research at POSTECH.',
+    type: 'website',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning className={inter.className}>
-      {/* Anti-FOUC: apply dark class before first paint */}
       <head>
         <script
           dangerouslySetInnerHTML={{
@@ -23,10 +29,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }}
         />
       </head>
-      <body className="min-h-screen bg-slate-50 text-slate-900 antialiased dark:bg-[#0b1424] dark:text-slate-100">
+      <body suppressHydrationWarning className="min-h-screen text-slate-900 antialiased dark:text-slate-100">
         <Providers>
           <Nav />
-          <main className="mx-auto w-full max-w-5xl px-6 pb-16 pt-10 md:px-10">
+          <main className="mx-auto w-full max-w-5xl px-6 pb-20 pt-10 md:px-10">
             {children}
           </main>
           <Footer />

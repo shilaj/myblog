@@ -61,23 +61,32 @@ export default function HomePage() {
   const pubsPreview = pubLines.slice(0, 3).join('\n') || publicationsDoc.content;
 
   return (
-    <div className="space-y-14">
+    <div className="space-y-20">
       {/* ── Hero ──────────────────────────────────────────── */}
-      <section className="grid gap-8 lg:grid-cols-[220px_1fr]">
-        {/* Left: photo + social */}
+      <section className="fade-up grid gap-10 lg:grid-cols-[240px_1fr]">
+        {/* Left: photo + status + social */}
         <div className="flex flex-col items-center gap-5 lg:items-start">
           {homeDoc.frontmatter.profile_image_path && (
-            <div className="relative h-44 w-44 overflow-hidden rounded-2xl border border-slate-200 shadow-sm dark:border-white/10 lg:h-48 lg:w-48">
-              <Image
-                src={homeDoc.frontmatter.profile_image_path}
-                alt={homeDoc.frontmatter.name}
-                fill
-                sizes="192px"
-                className="object-cover object-top"
-                priority
-              />
+            <div className="relative">
+              <div className="absolute -inset-1.5 rounded-3xl bg-gradient-to-br from-sky-400/40 via-indigo-400/30 to-pink-400/30 blur-lg" aria-hidden="true" />
+              <div className="relative h-44 w-44 overflow-hidden rounded-2xl border border-white/60 bg-white shadow-xl shadow-sky-500/10 dark:border-white/10 dark:shadow-sky-500/10 lg:h-52 lg:w-52">
+                <Image
+                  src={homeDoc.frontmatter.profile_image_path}
+                  alt={homeDoc.frontmatter.name}
+                  fill
+                  sizes="208px"
+                  className="object-cover object-top"
+                  priority
+                />
+              </div>
             </div>
           )}
+
+          <div className="inline-flex items-center gap-2 rounded-full border border-emerald-300/40 bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700 dark:border-emerald-300/20 dark:bg-emerald-500/10 dark:text-emerald-300">
+            <span className="status-dot" aria-hidden="true" />
+            Open to research collaborations
+          </div>
+
           {homeDoc.frontmatter.social_links && (
             <div className="flex flex-wrap justify-center gap-2 lg:justify-start">
               {Object.entries(homeDoc.frontmatter.social_links).map(([key, url]) => (
@@ -87,10 +96,10 @@ export default function HomePage() {
                   target={url.startsWith('mailto') ? undefined : '_blank'}
                   rel="noopener noreferrer"
                   title={socialLabels[key] ?? key}
-                  className="flex items-center gap-1.5 rounded-full border border-slate-200 px-3 py-1.5 text-xs text-slate-600 transition hover:border-slate-400 hover:text-slate-900 dark:border-white/20 dark:text-slate-300 dark:hover:border-white/40 dark:hover:text-white"
+                  aria-label={socialLabels[key] ?? key}
+                  className="group flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 transition hover:-translate-y-0.5 hover:border-sky-400 hover:text-sky-600 hover:shadow-md hover:shadow-sky-500/20 dark:border-white/15 dark:bg-white/5 dark:text-slate-300 dark:hover:border-cyan-300/60 dark:hover:text-cyan-200"
                 >
                   {socialIcons[key]}
-                  <span>{socialLabels[key] ?? key}</span>
                 </a>
               ))}
             </div>
@@ -98,60 +107,91 @@ export default function HomePage() {
         </div>
 
         {/* Right: language-aware bio */}
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-white/10 dark:bg-white/5 dark:shadow-none">
+        <div className="card p-6 lg:p-8">
           <LangBio translations={translations} role={homeDoc.frontmatter.role} />
         </div>
       </section>
 
       {/* ── Research highlight ────────────────────────────── */}
-      <section className="grid gap-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-white/10 dark:bg-white/5 dark:shadow-none lg:grid-cols-2">
-        <div>
-          <p className="text-xs font-medium uppercase tracking-[0.3em] text-sky-600 dark:text-cyan-200">Natural circulation</p>
-          <h3 className="mt-2 text-xl font-semibold text-slate-900 dark:text-white">Fluid intuition in motion</h3>
-          <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
-            Flow predictions using XRePIT for a 3D natural circulation case.
-          </p>
-          <video
-            src="/assets/img/natural_circulation.mp4"
-            className="mt-4 aspect-video w-full rounded-xl border border-slate-200 dark:border-white/10"
-            autoPlay loop muted playsInline controls
-          />
+      <section className="fade-up fade-up-delay-1">
+        <div className="mb-6 flex items-end justify-between">
+          <div>
+            <p className="eyebrow">Research highlight</p>
+            <h2 className="mt-2 text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+              Fluid intuition, fully resolved
+            </h2>
+          </div>
+          <a
+            href="https://arxiv.org/abs/2510.21804"
+            target="_blank"
+            rel="noreferrer"
+            className="hidden text-sm font-medium text-sky-600 hover:underline dark:text-cyan-300 sm:inline-block"
+          >
+            Read the paper →
+          </a>
         </div>
-        <div className="rounded-xl border border-slate-200 bg-slate-50 p-5 dark:border-white/10 dark:bg-slate-900/40">
-          <p className="text-xs font-medium uppercase tracking-[0.3em] text-pink-600 dark:text-pink-200">Framework</p>
-          <h3 className="mt-2 text-xl font-semibold text-slate-900 dark:text-white">
-            <a href="https://arxiv.org/abs/2510.21804" target="_blank" rel="noreferrer" className="hover:underline">
-              How XRePIT works
-            </a>
-          </h3>
-          <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
-            High-fidelity flow predictions via ML + CFD.
-          </p>
-          <div className="mt-4">
-            <ZoomableImage src="/assets/img/XRePIT_workflow.jpg" alt="XRePIT framework schematic" initialZoom={1.4} priority />
+
+        <div className="grid gap-6 lg:grid-cols-2">
+          <div className="card overflow-hidden p-6">
+            <p className="eyebrow !text-pink-600 dark:!text-pink-300">Natural circulation</p>
+            <h3 className="mt-3 text-lg font-semibold text-slate-900 dark:text-white">
+              Flow predictions, 3D, in motion
+            </h3>
+            <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+              Surrogate flow fields generated with XRePIT for a 3D natural-circulation case — high fidelity at a fraction of the cost.
+            </p>
+            <video
+              src="/assets/img/natural_circulation.mp4"
+              className="mt-5 aspect-video w-full rounded-xl border border-slate-200 dark:border-white/10"
+              autoPlay loop muted playsInline controls
+            />
+          </div>
+
+          <div className="card p-6">
+            <p className="eyebrow">Framework</p>
+            <h3 className="mt-3 text-lg font-semibold text-slate-900 dark:text-white">
+              <a href="https://arxiv.org/abs/2510.21804" target="_blank" rel="noreferrer" className="hover:underline">
+                How XRePIT works
+              </a>
+            </h3>
+            <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+              Physics-informed ML on top of CFD baselines — predictions that respect the underlying PDEs.
+            </p>
+            <div className="mt-5">
+              <ZoomableImage src="/assets/img/XRePIT_workflow.jpg" alt="XRePIT framework schematic" initialZoom={1.4} priority />
+            </div>
           </div>
         </div>
       </section>
 
       {/* ── Publications preview ──────────────────────────── */}
-      <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-white/10 dark:bg-white/5 dark:shadow-none">
-        <h2 className="text-xl font-semibold text-slate-900 dark:text-white">{publicationsDoc.frontmatter.title}</h2>
-        <Markdown className="prose prose-sm prose-slate mt-4 max-w-none dark:prose-invert" content={pubsPreview} />
-        <div className="mt-5">
-          <Link href="/publications" className="text-sm font-medium text-sky-600 hover:underline dark:text-cyan-300">
+      <section className="fade-up fade-up-delay-2 card p-6 lg:p-8">
+        <div className="flex items-end justify-between">
+          <div>
+            <p className="eyebrow">Selected work</p>
+            <h2 className="mt-2 text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+              {publicationsDoc.frontmatter.title}
+            </h2>
+          </div>
+          <Link
+            href="/publications"
+            className="text-sm font-medium text-sky-600 transition hover:text-sky-800 hover:underline dark:text-cyan-300 dark:hover:text-cyan-200"
+          >
             All publications →
           </Link>
         </div>
+        <Markdown className="prose prose-sm prose-slate mt-5 max-w-none dark:prose-invert prose-a:text-sky-600 dark:prose-a:text-cyan-300" content={pubsPreview} />
       </section>
 
       {/* ── Collaborators ─────────────────────────────────── */}
       {collaboratorImages.length > 0 && (
-        <section>
-          <h2 className="text-xl font-semibold text-slate-900 dark:text-white">Collaborators</h2>
-          <div className="mt-5 grid gap-4 sm:grid-cols-2 md:grid-cols-4">
+        <section className="fade-up fade-up-delay-3">
+          <p className="eyebrow">Working with</p>
+          <h2 className="mt-2 text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Collaborators</h2>
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 md:grid-cols-4">
             {collaboratorImages.map((src) => (
-              <div key={src} className="rounded-2xl border border-slate-200 bg-white p-3 shadow-sm dark:border-white/10 dark:bg-slate-900/40 dark:shadow-none">
-                <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl bg-slate-100 dark:bg-slate-950/60">
+              <div key={src} className="card card-hover p-3">
+                <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl bg-slate-100 dark:bg-slate-950/40">
                   <Image src={src} alt="Collaborator" fill sizes="240px" className="object-contain" />
                 </div>
               </div>
@@ -161,29 +201,44 @@ export default function HomePage() {
       )}
 
       {/* ── Recent writing ────────────────────────────────── */}
-      <section>
-        <div className="flex items-center justify-between">
-          <h2 className="text-xl font-semibold text-slate-900 dark:text-white">Recent Writing</h2>
-          <Link href="/blogs" className="text-sm font-medium text-sky-600 hover:underline dark:text-cyan-300">
+      <section className="fade-up fade-up-delay-4">
+        <div className="mb-6 flex items-end justify-between">
+          <div>
+            <p className="eyebrow">From the notebook</p>
+            <h2 className="mt-2 text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Recent writing</h2>
+          </div>
+          <Link
+            href="/blogs"
+            className="text-sm font-medium text-sky-600 transition hover:text-sky-800 hover:underline dark:text-cyan-300 dark:hover:text-cyan-200"
+          >
             All posts →
           </Link>
         </div>
-        <div className="mt-5 grid gap-4 md:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-3">
           {posts.map((post) => (
-            <article key={post.slug} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-white/10 dark:bg-white/5 dark:shadow-none">
+            <Link
+              key={post.slug}
+              href={`/blogs/${post.slug}`}
+              className="card card-hover group flex flex-col p-5"
+            >
               <p className="text-xs font-medium uppercase tracking-wide text-sky-600 dark:text-cyan-200">
                 {new Date(post.frontmatter.date).toLocaleDateString(undefined, {
                   year: 'numeric', month: 'short', day: 'numeric',
                 })}
               </p>
-              <h3 className="mt-2 text-base font-semibold text-slate-900 dark:text-white">{post.frontmatter.title}</h3>
+              <h3 className="mt-2 text-base font-semibold text-slate-900 transition group-hover:text-sky-700 dark:text-white dark:group-hover:text-cyan-200">
+                {post.frontmatter.title}
+              </h3>
               {post.frontmatter.excerpt && (
-                <p className="mt-1.5 text-sm text-slate-600 dark:text-slate-300">{post.frontmatter.excerpt}</p>
+                <p className="mt-2 line-clamp-3 text-sm text-slate-600 dark:text-slate-300">
+                  {post.frontmatter.excerpt}
+                </p>
               )}
-              <Link href={`/blogs/${post.slug}`} className="mt-4 inline-block text-sm font-medium text-sky-600 hover:underline dark:text-cyan-300">
-                Read →
-              </Link>
-            </article>
+              <span className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-sky-600 dark:text-cyan-300">
+                Read
+                <span className="transition group-hover:translate-x-1">→</span>
+              </span>
+            </Link>
           ))}
           {posts.length === 0 && (
             <p className="text-sm text-slate-500 dark:text-slate-400">Add Markdown files in <code>content/blogs/</code> to publish posts.</p>

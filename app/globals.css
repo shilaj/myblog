@@ -2,19 +2,48 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Light mode base */
-body {
-  min-height: 100vh;
-  background-color: #f8fafc;
-  transition: background-color 0.2s, color 0.2s;
+:root {
+  --accent: 14 165 233;       /* sky-500 */
+  --accent-soft: 56 189 248;  /* sky-400 */
+  --warm: 244 114 182;        /* pink-400 */
 }
 
-/* Dark mode gradient background */
-html.dark body {
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  background-color: #f6f7fb;
+  color: #0f172a;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* Light mode: subtle aurora mesh */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
   background:
-    radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.12), transparent 25%),
-    radial-gradient(circle at 80% 30%, rgba(14, 165, 233, 0.1), transparent 22%),
-    linear-gradient(145deg, #0b1424 0%, #0f172a 45%, #0b1220 100%);
+    radial-gradient(60% 50% at 12% 8%, rgba(56, 189, 248, 0.10), transparent 60%),
+    radial-gradient(45% 40% at 92% 18%, rgba(244, 114, 182, 0.08), transparent 60%),
+    radial-gradient(50% 50% at 50% 100%, rgba(99, 102, 241, 0.06), transparent 60%);
+}
+
+/* Dark mode: deeper aurora */
+html.dark body {
+  background-color: #07101f;
+  color: #e2e8f0;
+}
+
+html.dark body::before {
+  background:
+    radial-gradient(55% 45% at 15% 10%, rgba(56, 189, 248, 0.18), transparent 60%),
+    radial-gradient(50% 45% at 88% 22%, rgba(244, 114, 182, 0.14), transparent 60%),
+    radial-gradient(60% 50% at 50% 110%, rgba(99, 102, 241, 0.16), transparent 65%),
+    linear-gradient(145deg, #07101f 0%, #0b1424 45%, #07101f 100%);
 }
 
 a {
@@ -25,4 +54,139 @@ a {
 img {
   max-width: 100%;
   height: auto;
+}
+
+/* Selection */
+::selection {
+  background: rgba(56, 189, 248, 0.35);
+  color: inherit;
+}
+
+/* Scrollbar — subtle */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.35);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+html.dark ::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.25);
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.55);
+  background-clip: padding-box;
+}
+
+/* Focus ring */
+:focus-visible {
+  outline: 2px solid rgb(var(--accent-soft));
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Entry animations */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes pulseRing {
+  0%   { box-shadow: 0 0 0 0   rgba(56, 189, 248, 0.45); }
+  70%  { box-shadow: 0 0 0 18px rgba(56, 189, 248, 0); }
+  100% { box-shadow: 0 0 0 0   rgba(56, 189, 248, 0); }
+}
+
+.fade-up {
+  animation: fadeUp 0.6s ease-out both;
+}
+.fade-up-delay-1 { animation-delay: 0.08s; }
+.fade-up-delay-2 { animation-delay: 0.18s; }
+.fade-up-delay-3 { animation-delay: 0.28s; }
+.fade-up-delay-4 { animation-delay: 0.38s; }
+
+.fade-in { animation: fadeIn 0.6s ease-out both; }
+
+.status-dot {
+  position: relative;
+  display: inline-block;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 9999px;
+  background: rgb(34, 197, 94);
+}
+.status-dot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: rgb(34, 197, 94);
+  animation: pulseRing 2.2s ease-out infinite;
+}
+
+/* Card shared styles */
+.card {
+  position: relative;
+  border-radius: 1rem;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  background-color: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(8px);
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+html.dark .card {
+  border-color: rgba(255, 255, 255, 0.08);
+  background-color: rgba(15, 23, 42, 0.55);
+}
+.card-hover:hover {
+  transform: translateY(-2px);
+  border-color: rgba(56, 189, 248, 0.45);
+  box-shadow: 0 10px 30px -15px rgba(14, 165, 233, 0.35);
+}
+html.dark .card-hover:hover {
+  border-color: rgba(56, 189, 248, 0.55);
+  box-shadow: 0 10px 30px -10px rgba(14, 165, 233, 0.4);
+}
+
+/* Subtle accent underline for nav/section eyebrows */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgb(2, 132, 199);
+}
+html.dark .eyebrow {
+  color: rgb(125, 211, 252);
+}
+.eyebrow::before {
+  content: "";
+  width: 1.25rem;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.6;
+}
+
+/* Reduce motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

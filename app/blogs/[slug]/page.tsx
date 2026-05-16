@@ -10,8 +10,9 @@ export function generateStaticParams() {
   return getPostSlugs().map((slug) => ({ slug }));
 }
 
-export function generateMetadata({ params }: { params: { slug: string } }) {
-  const post = getPostBySlug(params.slug);
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const post = getPostBySlug(slug);
   if (!post) return { title: 'Post not found' };
   return {
     title: `${post.frontmatter.title} | Blog`,
@@ -19,8 +20,9 @@ export function generateMetadata({ params }: { params: { slug: string } }) {
   };
 }
 
-export default function BlogPostPage({ params }: { params: { slug: string } }) {
-  const post = getPostBySlug(params.slug);
+export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const post = getPostBySlug(slug);
   if (!post) notFound();
 
   const posts = getAllPosts();
@@ -31,13 +33,16 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
   const next = posts.length > 1 ? posts[(index - 1 + posts.length) % posts.length] : null;
 
   return (
-    <article className="prose prose-slate max-w-none dark:prose-invert">
-      <p className="text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">
+    <article className="fade-up prose prose-slate max-w-none dark:prose-invert prose-a:text-sky-600 dark:prose-a:text-cyan-300 prose-a:no-underline hover:prose-a:underline">
+      <Link href="/blogs" className="not-prose inline-flex items-center gap-1 text-sm text-slate-500 transition hover:text-slate-900 dark:text-slate-400 dark:hover:text-white">
+        ← Back to blog
+      </Link>
+      <p className="not-prose mt-6 text-xs font-medium uppercase tracking-widest text-slate-500 dark:text-slate-400">
         {new Date(post.frontmatter.date).toLocaleDateString(undefined, {
           year: 'numeric', month: 'long', day: 'numeric',
         })}
       </p>
-      <h1>{post.frontmatter.title}</h1>
+      <h1 className="mt-2">{post.frontmatter.title}</h1>
       {post.frontmatter.tags && (
         <p className="text-sm text-sky-600 dark:text-cyan-200">{post.frontmatter.tags.join(' · ')}</p>
       )}
@@ -62,7 +67,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
         )}
       </div>
 
-      <Comments threadId={`blog-${params.slug}`} title="Comments" />
+      <Comments threadId={`blog-${slug}`} title="Comments" />
     </article>
   );
 }

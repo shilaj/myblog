@@ -5,14 +5,15 @@ import Comments from '@/components/Comments';
 import Markdown from '@/components/Markdown';
 import { getProjectBySlug, getProjectSlugs, getAllProjects } from '@/lib/markdown';
 
-type Props = { params: { slug: string } };
+type Props = { params: Promise<{ slug: string }> };
 
 export function generateStaticParams() {
   return getProjectSlugs().map((slug) => ({ slug }));
 }
 
-export function generateMetadata({ params }: Props) {
-  const project = getProjectBySlug(params.slug);
+export async function generateMetadata({ params }: Props) {
+  const { slug } = await params;
+  const project = getProjectBySlug(slug);
   if (!project) return { title: 'Project not found' };
   return {
     title: `${project.frontmatter.title} | Projects`,
@@ -20,8 +21,9 @@ export function generateMetadata({ params }: Props) {
   };
 }
 
-export default function ProjectPage({ params }: Props) {
-  const project = getProjectBySlug(params.slug);
+export default async function ProjectPage({ params }: Props) {
+  const { slug } = await params;
+  const project = getProjectBySlug(slug);
   if (!project) notFound();
 
   const projects = getAllProjects();
@@ -33,12 +35,12 @@ export default function ProjectPage({ params }: Props) {
   const isExternalLink = project.frontmatter.link?.startsWith('http');
 
   return (
-    <article className="max-w-3xl">
-      <Link href="/hobbies#projects" className="text-sm text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white">
+    <article className="fade-up max-w-3xl">
+      <Link href="/hobbies#projects" className="inline-flex items-center gap-1 text-sm text-slate-500 transition hover:text-slate-900 dark:text-slate-400 dark:hover:text-white">
         ← Back to projects
       </Link>
-      <p className="mt-6 text-xs font-medium uppercase tracking-[0.3em] text-sky-600 dark:text-cyan-200">Pet project</p>
-      <h1 className="mt-2 text-3xl font-bold text-slate-900 dark:text-white">{project.frontmatter.title}</h1>
+      <p className="mt-6 eyebrow">Pet project</p>
+      <h1 className="mt-3 text-3xl font-bold tracking-tight text-slate-900 dark:text-white lg:text-4xl">{project.frontmatter.title}</h1>
       <p className="mt-1.5 text-slate-600 dark:text-slate-400">{project.frontmatter.summary}</p>
 
       {project.frontmatter.image && (
@@ -105,7 +107,7 @@ export default function ProjectPage({ params }: Props) {
           </Link>
         ) : <span className="text-slate-400 dark:text-slate-600">Only build so far</span>}
       </div>
-      <Comments threadId={`project-${params.slug}`} title="Comments" />
+      <Comments threadId={`project-${slug}`} title="Comments" />
     </article>
   );
 }

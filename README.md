@@ -1,63 +1,76 @@
-# My Blog
+# Shilaj Baral — Personal Site
 
-## Firebase comments configuration
+Next.js 16 (static export) → GitHub Pages. Custom domain: **shilaj.com.np**.
 
-The Google/Facebook comments widget relies on Firebase Authentication and Firestore. Deployments will show a warning panel or fail to sign users in unless the following steps are completed:
+## Local development
 
-1. Create or reuse a Firebase project and enable both **Firestore** and **Authentication**.
-2. Under **Authentication → Sign-in method**, enable the **Google** and **Facebook** providers. Facebook requires an App ID/secret and you must copy the OAuth redirect URI that Firebase shows back into the Facebook console.
-3. Under **Authentication → Settings → Authorized domains**, add every origin that will host the site (e.g., `localhost`, `127.0.0.1`, production domains, GitHub Pages URL).
-4. Generate a Web App config from Firebase and copy the values into an `.env.local` file using the following keys:
-
-```
-NEXT_PUBLIC_FIREBASE_API_KEY=
-NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=
-NEXT_PUBLIC_FIREBASE_PROJECT_ID=
-NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=
-NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
-NEXT_PUBLIC_FIREBASE_APP_ID=
+```bash
+npm install
+npm run dev          # http://localhost:3000
 ```
 
-> `.env.local` is ignored by git; do **not** commit your real credentials.
+## Deploy
 
-5. Restart `npm run dev` (or rebuild in CI) whenever these values change so Next.js can inline them for the client bundle.
+Just push to `main`. The workflow in `.github/workflows/deploy.yml` builds and publishes to GitHub Pages automatically.
 
-If sign-in still fails, open the browser console to read the exact Firebase error code. The UI now surfaces the most common failure causes (popup blocked, unauthorized domain, provider mismatch, etc.) so you can correct the Firebase console settings without digging through logs.
+```bash
+git add .
+git commit -m "Update content"
+git push origin main
+```
 
-## GitHub Pages deployment checklist
+Watch the build at `https://github.com/shilaj/myblog/actions`. The site is live at https://shilaj.com.np once the green check appears (usually ~2 min).
 
-Static export is already enabled via `next.config.mjs` (`output: 'export'`). Use the following workflow whenever you want to publish an update:
+## One-time setup (done already, here for reference)
 
-1. **Install dependencies**
-	```bash
-	npm install
-	```
-	Ensure `.env.local` exists before the next step so Firebase keys are inlined during the build.
+1. **Repo → Settings → Pages → Source: "GitHub Actions"** (not "Deploy from a branch").
+2. **Repo → Settings → Pages → Custom domain: `shilaj.com.np`** (the workflow keeps the `CNAME` from `public/CNAME`).
+3. (Optional) For Firebase comments to work in production, add these secrets under
+   **Repo → Settings → Secrets and variables → Actions → New repository secret**:
+   - `NEXT_PUBLIC_FIREBASE_API_KEY`
+   - `NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN`
+   - `NEXT_PUBLIC_FIREBASE_PROJECT_ID`
+   - `NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET`
+   - `NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID`
+   - `NEXT_PUBLIC_FIREBASE_APP_ID`
 
-2. **Build the static site**
-	```bash
-	npm run build
-	```
-	This produces an `out/` directory containing HTML/CSS/JS that GitHub Pages can host. Delete any previous `out/` before copying to avoid stale files.
+   Without these the comment widgets stay disabled, but the rest of the site works fine.
 
-3. **Publish to the `gh-pages` branch**
-	```bash
-	git checkout --orphan gh-pages
-	rm -rf .
-	cp -R ../myblog/out/* .
-	touch .nojekyll
-	git add .
-	git commit -m "Deploy static export"
-	git push -f origin gh-pages
-	git checkout main
-	```
-	- Keep a `CNAME` file inside `public/` so it is copied into `out/` and your custom domain remains linked in Pages.
-	- `.nojekyll` prevents GitHub Pages from stripping the `_next` folder.
+## Adding content
 
-4. **Configure GitHub Pages**
-	In the repository → **Settings → Pages**, choose **Deploy from a branch**, select `gh-pages`, and set the folder to `/`. Save the change. Pages will serve the contents of that branch at `https://<username>.github.io/<repo>` (or your custom domain if DNS is already configured).
+- **Blog post:** drop a Markdown file in `content/blogs/<slug>.md` with frontmatter `title`, `date`, optional `excerpt`/`tags`.
+- **Poem:** drop a Markdown file in `_posts/<slug>.md` with frontmatter `title`, `date`, optional `subtitle`/`tags`.
+- **Project:** drop a Markdown file in `content/projects/<slug>.md` with frontmatter `title`, `summary`, optional `tags`/`image`/`link`/`repo`/`embedPath`.
+- **Publications / CV / Talks / Hobbies intro:** edit the relevant file in `content/`.
+- **Home bio (EN/NE/KO):** edit `content/home.md`, `content/home.ne.md`, `content/home.ko.md`.
 
-5. **Update DNS/custom domain**
-	If you use a custom domain, keep the DNS `CNAME` pointing to `<username>.github.io`. GitHub will read the `CNAME` file from the deployment and issue certificates automatically.
+Then commit & push — no build step needed locally.
 
-Repeat steps 2–3 for future releases. Only the compiled `out/` directory belongs on `gh-pages`; all source code and history remain on `main`.
+## Project structure
+
+```
+app/                  # Next.js routes (App Router)
+components/           # React components (Nav, Footer, etc.)
+content/              # Markdown content
+_posts/               # Poetry notebooks
+public/               # Static assets — CNAME, profile.jpg, /assets/*
+.github/workflows/    # CI: deploy.yml builds & publishes the site
+next.config.mjs       # Static-export config
+tailwind.config.ts    # Tailwind theme
+```
+
+## If something goes wrong
+
+- **Build fails in Actions:** open the failed run on GitHub, click the `build` job to see the error. Fix locally with `npm run build`, push again.
+- **Domain stops resolving:** confirm your DNS still points `shilaj.com.np` at GitHub Pages and `public/CNAME` still says `shilaj.com.np`.
+- **Pages serves the wrong source:** check Repo → Settings → Pages is set to *GitHub Actions*, not *Deploy from a branch*.
+
+## Local build (optional)
+
+If you want to verify before pushing:
+
+```bash
+npm run build        # outputs to ./out
+OR npx -y -p node@20 -- npm run build
+npx serve out        # preview locally
+```

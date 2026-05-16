@@ -51,21 +51,29 @@ export default function Footer() {
   const { name = 'Shilaj Baral', social_links: socials = {} } = home.frontmatter;
 
   return (
-    <footer className="border-t border-slate-200 bg-white/80 py-8 text-center text-sm text-slate-500 dark:border-white/10 dark:bg-slate-950/80 dark:text-slate-400">
-      <p>© {year} {name}. All rights reserved.</p>
-      <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
-        {Object.entries(socials).map(([key, url]) => (
-          <a
-            key={key}
-            href={url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1.5 rounded-full border border-slate-200 px-3 py-1.5 text-slate-600 transition hover:border-slate-400 hover:text-slate-900 dark:border-white/15 dark:text-slate-300 dark:hover:border-white/40 dark:hover:text-white"
-          >
-            {iconMap[key] ?? iconMap.email}
-            <span>{socialLabels[key] ?? key}</span>
-          </a>
-        ))}
+    <footer className="mt-10 border-t border-slate-200/70 bg-white/40 backdrop-blur dark:border-white/10 dark:bg-slate-950/30">
+      <div className="mx-auto flex w-full max-w-5xl flex-col items-center gap-6 px-6 py-10 text-center md:flex-row md:justify-between md:text-left">
+        <div>
+          <p className="text-sm font-medium text-slate-700 dark:text-slate-200">{name}</p>
+          <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+            © {year} {name}. All rights reserved.
+          </p>
+        </div>
+        <div className="flex flex-wrap items-center justify-center gap-2">
+          {Object.entries(socials).map(([key, url]) => (
+            <a
+              key={key}
+              href={url}
+              target={url.startsWith('mailto') ? undefined : '_blank'}
+              rel="noopener noreferrer"
+              aria-label={socialLabels[key] ?? key}
+              title={socialLabels[key] ?? key}
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:-translate-y-0.5 hover:border-sky-400 hover:text-sky-600 dark:border-white/15 dark:text-slate-400 dark:hover:border-cyan-300/60 dark:hover:text-cyan-200"
+            >
+              {iconMap[key] ?? iconMap.email}
+            </a>
+          ))}
+        </div>
       </div>
     </footer>
   );
